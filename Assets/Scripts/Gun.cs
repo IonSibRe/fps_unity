@@ -26,7 +26,7 @@ public class Gun : MonoBehaviour
 
     public Camera fpsCam;
     public Animator animator;
-    //public ParticleSystem muzzleFlash;
+    public ParticleSystem muzzleFlash;
     //public GameObject impactEffect;
 
     void Start()
@@ -77,10 +77,12 @@ public class Gun : MonoBehaviour
 
     private void Shoot()
     {
-        RaycastHit hit;
+        muzzleFlash.Play();
 
         currentAmmo--;
-
+       
+        RaycastHit hit;
+    
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
             Target target = hit.transform.GetComponent<Target>();
