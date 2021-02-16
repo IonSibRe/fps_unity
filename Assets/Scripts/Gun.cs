@@ -5,8 +5,8 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     /* TODO: 
-            - Fix Gun Skew
-            - Add MuzzleFlash
+            - Fix Gun Skew          - Done
+            - Add MuzzleFlash       - Done
             - Add Impact Effect
     */
 
@@ -14,19 +14,24 @@ public class Gun : MonoBehaviour
     public float range = 100.0f;
     public float impactForce = 30.0f;
     public float fireRate = 15.0f;
+    public float reloadTime = 1f;
 
     private float nextTimeToFire = 0f;
-
-    public float reloadTime = 1f;
 
     public int maxAmmo = 10;
     private int currentAmmo;
 
+    public bool isAutomatic;
     private bool isReloading;
 
     public Camera fpsCam;
     public Animator animator;
+
     public ParticleSystem muzzleFlash;
+    public GameObject muzzleLight;
+
+    public AudioClip gunShotSound;
+    public AudioSource shootSound;
     //public GameObject impactEffect;
 
     void Start()
@@ -52,7 +57,13 @@ public class Gun : MonoBehaviour
             return;
         }
 
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && isAutomatic)
+        {
+            nextTimeToFire = Time.time + 1f / fireRate;
+            Shoot();
+        }
+
+        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && !isAutomatic)
         {
             nextTimeToFire = Time.time + 1f / fireRate;
             Shoot();
@@ -62,8 +73,6 @@ public class Gun : MonoBehaviour
     private IEnumerator Reload()
     {
         isReloading = true;
-
-        Debug.Log("Reloading...");
 
         animator.SetBool("Reloading", true);
 
@@ -75,9 +84,22 @@ public class Gun : MonoBehaviour
         isReloading = false;
     }
 
+    private IEnumerator MuzzleLightSwitch()
+    {
+        muzzleLight.SetActive(true);
+
+        yield return new WaitForSeconds(0.2f);
+
+        muzzleLight.SetActive(false);
+    }
+
     private void Shoot()
     {
         muzzleFlash.Play();
+        StartCoroutine(MuzzleLightSwitch());
+
+
+        shootSound.PlayOneShot(gunShotSound);
 
         currentAmmo--;
        
@@ -97,8 +119,7 @@ public class Gun : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
 
-            // GameObject impactObject = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            // Destroy(impactObject, 2.0f);
+            //GameObject impactObject = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
         }
     }
 }
