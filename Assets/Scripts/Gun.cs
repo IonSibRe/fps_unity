@@ -26,13 +26,14 @@ public class Gun : MonoBehaviour
 
     public Camera fpsCam;
     public Animator animator;
+    public Animator localAnimator;
 
     public ParticleSystem muzzleFlash;
     public GameObject muzzleLight;
 
     public AudioClip gunShotSound;
     public AudioSource shootSound;
-    //public GameObject impactEffect;
+    public GameObject impactEffect;
 
     void Start()
     {
@@ -42,6 +43,7 @@ public class Gun : MonoBehaviour
     void OnEnable()
     {
         isReloading = false;
+        localAnimator.SetTrigger("WeaponIdle");
         animator.SetBool("Reloading", false);
     }
 
@@ -93,13 +95,24 @@ public class Gun : MonoBehaviour
         muzzleLight.SetActive(false);
     }
 
+    //private IEnumerator Recoil()
+    //{
+    //    localAnimator.SetBool("Fire", true);
+    //    yield return new WaitForSeconds(0.2f);
+    //    localAnimator.SetBool("Fire", false);
+    //}
+
     private void Shoot()
     {
+        // Muzzle Flash
         muzzleFlash.Play();
         StartCoroutine(MuzzleLightSwitch());
 
-
+        // Gun Sound
         shootSound.PlayOneShot(gunShotSound);
+
+        // Recoil
+        localAnimator.Play("Fire");
 
         currentAmmo--;
        
@@ -119,7 +132,8 @@ public class Gun : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
 
-            //GameObject impactObject = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            GameObject impactObject = Instantiate(impactEffect, hit.point - fpsCam.transform.forward * 0.1f, Quaternion.LookRotation(hit.normal));
+            Destroy(impactObject, 0.1f);
         }
     }
 }

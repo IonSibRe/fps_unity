@@ -25,6 +25,7 @@
 # Custom Assets
 /Assets/Sci-Fi Weapons*
 /Assets/PostApocalypseGunsDemo*
+/Assets/Standard Assets*
 
 # Gradle cache directory
 .gradle/
