@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    /* TODO: 
-            - Fix Gun Skew          - Done
-            - Add MuzzleFlash       - Done
-            - Add Impact Effect
-    */
-
-    public float damage = 10.0f;
-    public float range = 100.0f;
-    public float impactForce = 30.0f;
-    public float fireRate = 15.0f;
-    public float reloadTime = 1f;
+    // Guns Stats
+    [SerializeField] private float damage = 10.0f;
+    [SerializeField] private float range = 100.0f;
+    [SerializeField] private float impactForce = 30.0f;
+    [SerializeField] private float fireRate = 15.0f;
+    [SerializeField] private float reloadTime = 1f;
 
     private float nextTimeToFire = 0f;
 
+    // Ammo
     public int maxAmmo = 10;
     private int currentAmmo;
 
+    // Conditionals
     public bool isAutomatic;
     private bool isReloading;
+
+    // Animation Reset
+    private Vector3 startPos;
 
     public Camera fpsCam;
     public Animator animator;
@@ -38,18 +38,22 @@ public class Gun : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
+        startPos = transform.localPosition;
     }
 
     void OnEnable()
     {
         isReloading = false;
-        localAnimator.SetTrigger("WeaponIdle");
         animator.SetBool("Reloading", false);
+    }
+
+    private void OnDisable()
+    {
+        transform.localPosition = startPos;
     }
 
     void Update()
     {
-
         if (isReloading)
             return;
 
@@ -95,13 +99,6 @@ public class Gun : MonoBehaviour
         muzzleLight.SetActive(false);
     }
 
-    //private IEnumerator Recoil()
-    //{
-    //    localAnimator.SetBool("Fire", true);
-    //    yield return new WaitForSeconds(0.2f);
-    //    localAnimator.SetBool("Fire", false);
-    //}
-
     private void Shoot()
     {
         // Muzzle Flash
@@ -116,22 +113,23 @@ public class Gun : MonoBehaviour
 
         currentAmmo--;
        
-        RaycastHit hit;
-    
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out RaycastHit hit, range))
         {
             Target target = hit.transform.GetComponent<Target>();
 
+            // Damage
             if (target != null)
             {
                 target.TakeDamage(damage);
             }
 
+            // Force
             if (hit.rigidbody != null)
             {
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
 
+            // Impact Hit
             GameObject impactObject = Instantiate(impactEffect, hit.point - fpsCam.transform.forward * 0.1f, Quaternion.LookRotation(hit.normal));
             Destroy(impactObject, 0.1f);
         }

@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float rayLengthLower = 0.5f;
     [SerializeField] private float rayLengthUpper = 0.75f;
 
-
     // Player Height
     public float originalHeight;
     public float reducedHeight = 1.25f;

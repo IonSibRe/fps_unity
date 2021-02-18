@@ -15,7 +15,6 @@ public class MouseLook : MonoBehaviour
     {
         offset = transform.position - playerBody.transform.position;
 
-
         // Hide & Lock Cursor
         Cursor.lockState = CursorLockMode.Locked;
     }
