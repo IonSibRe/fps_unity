@@ -51,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         UserInput();
         Jump();
         Sprint();
-        //Crouch();
+        Crouch();
     }
 
     void FixedUpdate()
@@ -87,7 +87,6 @@ public class PlayerMovement : MonoBehaviour
         // Sprinting
         if (isSprinting && !slide.isSliding)
             rb.AddForce(moveDirection * sprintSpeed * Time.fixedDeltaTime);
-
     }
 
     // Jump
@@ -112,11 +111,36 @@ public class PlayerMovement : MonoBehaviour
     // Crouch
     private void Crouch()
     {
+        // Crouch and Stop Sprinting
         if (Input.GetKeyDown(KeyCode.C))
+        {
+            isSprinting = false;
             isCrouching = true;
+            playerCollider.height = reducedHeight;
+
+        }
 
         if (Input.GetKeyUp(KeyCode.C))
+        {
             isCrouching = false;
+            playerCollider.height = originalHeight;
+        }
+
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+        //    if (!isCrouching)
+        //    {
+        //        isSprinting = false;
+        //        isCrouching = true;
+        //        playerCollider.height = reducedHeight;
+        //    }
+
+        //    else
+        //    {
+        //        isCrouching = false;
+        //        playerCollider.height = originalHeight;
+        //    }
+        //}
     }
 
     private void StepClimb()
