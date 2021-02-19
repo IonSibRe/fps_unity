@@ -37,10 +37,10 @@ public class Slide : MonoBehaviour
         Vector3 rayOrigin = new Vector3(playerCollider.transform.position.x, playerCollider.bounds.max.y, playerCollider.transform.position.z);
         ceilingBlock = Physics.SphereCast(rayOrigin, sphereCastRadius, Vector3.up, out _, rayLength);
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.LeftControl) && Input.GetKey(KeyCode.W) && !playerController.isCrouching)
             StartSliding();
 
-        if ((!Input.GetKey(KeyCode.LeftControl) || currentSlideTime > slideTime) && !ceilingBlock)
+        if ((!Input.GetKey(KeyCode.LeftControl) || currentSlideTime > slideTime) && !ceilingBlock && !playerController.isCrouching)
             StopSliding();
 
         if (isSliding)

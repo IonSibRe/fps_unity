@@ -5,6 +5,7 @@ public class MouseLook : MonoBehaviour
     public Transform playerBody;
 
     public float mouseSens = 150f;
+    Vector3 offset;
 
     // Looking up or down = rotating around x axis which is why the variable is called xRotation
     private float xRotation = 0;
@@ -12,6 +13,8 @@ public class MouseLook : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        offset = transform.position - playerBody.transform.position;
+
         // Hide & Lock Cursor
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -19,11 +22,14 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.position = playerBody.transform.position + offset;
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSens * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSens * Time.deltaTime;
 
         // Rotate on the y axis (Vector3.up = Vector3(0, 1, 0))
         playerBody.Rotate(Vector3.up * mouseX);
+        transform.Rotate(Vector3.up * mouseX);
 
         // Decreasing so the rotation isn't flipped.
         xRotation -= mouseY;
@@ -32,6 +38,6 @@ public class MouseLook : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         // Set the rotation
-        transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        transform.rotation = Quaternion.Euler(xRotation, playerBody.rotation.eulerAngles.y, 0);
     }
 }
