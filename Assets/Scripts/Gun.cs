@@ -57,7 +57,7 @@ public class Gun : MonoBehaviour
         if (isReloading)
             return;
 
-        if (currentAmmo <= 0)
+        if (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo != maxAmmo)) 
         {
             StartCoroutine(Reload());
             return;
