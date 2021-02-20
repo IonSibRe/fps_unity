@@ -15,7 +15,7 @@ public class Gun : MonoBehaviour
 
     // Ammo
     public int maxAmmo = 10;
-    private int currentAmmo;
+    public int currentAmmo;
 
     // Conditionals
     public bool isAutomatic;
@@ -117,7 +117,7 @@ public class Gun : MonoBehaviour
         {
             Target target = hit.transform.GetComponent<Target>();
 
-            // Damage
+            // Damage && Score
             if (target != null)
             {
                 target.TakeDamage(damage);

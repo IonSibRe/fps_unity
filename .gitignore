@@ -26,6 +26,7 @@
 /Assets/Sci-Fi Weapons*
 /Assets/PostApocalypseGunsDemo*
 /Assets/Standard Assets*
+/Assets/TextMesh Pro*
 
 # Gradle cache directory
 .gradle/

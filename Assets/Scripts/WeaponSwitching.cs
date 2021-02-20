@@ -5,6 +5,7 @@ using UnityEngine;
 public class WeaponSwitching : MonoBehaviour
 {
     public int selectedWeapon = 0;
+    public int previousSelectedWeapon;
 
     void Start()
     {
@@ -13,7 +14,7 @@ public class WeaponSwitching : MonoBehaviour
 
     void Update()
     {
-        int previousSelectedWeapon = selectedWeapon;
+        previousSelectedWeapon = selectedWeapon;
 
         // Scroll wheel Weapon Switch
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
