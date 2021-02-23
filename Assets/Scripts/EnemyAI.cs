@@ -75,13 +75,15 @@ public class EnemyAI : MonoBehaviour
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
+        Debug.DrawRay(transform.position, transform.forward, Color.red);
+
         // Attack
         if (!alreadyAttacked)
         {
-            GameObject projectileGameObj = Instantiate(projectile, transform.position, Quaternion.identity);
+            GameObject projectileGameObj = Instantiate(projectile, transform.position + transform.forward, Quaternion.identity);
             Rigidbody projectileRB = projectileGameObj.GetComponent<Rigidbody>();
 
-            projectileRB.AddForce(transform.forward * 32f, ForceMode.Impulse);
+            projectileRB.AddForce((player.position - transform.position).normalized * 32f, ForceMode.Impulse);
 
             alreadyAttacked = true;
 
