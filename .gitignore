@@ -28,6 +28,11 @@
 /Assets/Standard Assets*
 /Assets/TextMesh Pro*
 
+# Nav Mesh Agent Assets
+/Assets/Scripts/NavMeshComponents*
+/Assets/Scenes/Main/NavMesh-NavMesh.asset
+/Assets/Scenes/Main/NavMesh-NavMesh.asset.meta
+
 # Gradle cache directory
 .gradle/
 
