@@ -77,7 +77,6 @@ public class SettingsMenu : MonoBehaviour
             {
                 currentQualityIndex = i;
             }
-
         }
 
         qualityDropdown.AddOptions(qualitySettings);
