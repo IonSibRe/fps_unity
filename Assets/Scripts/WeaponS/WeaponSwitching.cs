@@ -16,12 +16,33 @@ public class WeaponSwitching : MonoBehaviour
     {
         previousSelectedWeapon = selectedWeapon;
 
+        if (!PauseMenu.GameIsPaused)
+            SwitchWeapon();
+    }
+
+    private void SelectWeapon()
+    {
+        int i = 0;
+        foreach(Transform weapon in transform)
+        {
+            if (i == selectedWeapon)
+                weapon.gameObject.SetActive(true);
+            else
+                weapon.gameObject.SetActive(false);
+
+            i++;
+        }
+    }
+
+    private void SwitchWeapon()
+    {
+
         // Scroll wheel Weapon Switch
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
             if (selectedWeapon >= transform.childCount - 1)
                 selectedWeapon = 0;
-            else 
+            else
                 selectedWeapon++;
         }
 
@@ -46,20 +67,6 @@ public class WeaponSwitching : MonoBehaviour
         // Select Weapon
         if (previousSelectedWeapon != selectedWeapon)
             SelectWeapon();
-    }
-
-    private void SelectWeapon()
-    {
-        int i = 0;
-        foreach(Transform weapon in transform)
-        {
-            if (i == selectedWeapon)
-                weapon.gameObject.SetActive(true);
-            else
-                weapon.gameObject.SetActive(false);
-
-            i++;
-        }
     }
 
 }

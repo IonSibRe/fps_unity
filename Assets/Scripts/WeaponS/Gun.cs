@@ -54,25 +54,28 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        if (isReloading)
-            return;
-
-        if (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo != maxAmmo)) 
+        if (!PauseMenu.GameIsPaused)
         {
-            StartCoroutine(Reload());
-            return;
-        }
+            if (isReloading)
+                return;
 
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && isAutomatic)
-        {
-            nextTimeToFire = Time.time + 1f / fireRate;
-            Shoot();
-        }
+            if (currentAmmo <= 0 || (Input.GetKeyDown(KeyCode.R) && currentAmmo != maxAmmo)) 
+            {
+                StartCoroutine(Reload());
+                return;
+            }
 
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && !isAutomatic)
-        {
-            nextTimeToFire = Time.time + 1f / fireRate;
-            Shoot();
+            if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && isAutomatic)
+            {
+                nextTimeToFire = Time.time + 1f / fireRate;
+                Shoot();
+            }
+
+            if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && !isAutomatic)
+            {
+                nextTimeToFire = Time.time + 1f / fireRate;
+                Shoot();
+            }
         }
     }
 

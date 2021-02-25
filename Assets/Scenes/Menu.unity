@@ -1274,6 +1274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: aca5171e3f4d35a47917cbb95392e324, type: 2}
   resolutionDropdown: {fileID: 812714536}
+  qualityDropdown: {fileID: 574361909}
 --- !u!1 &495580587
 GameObject:
   m_ObjectHideFlags: 0
