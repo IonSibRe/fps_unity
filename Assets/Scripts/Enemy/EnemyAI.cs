@@ -75,8 +75,6 @@ public class EnemyAI : MonoBehaviour
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
-        Debug.DrawRay(transform.position, transform.forward, Color.red);
-
         // Attack
         if (!alreadyAttacked)
         {

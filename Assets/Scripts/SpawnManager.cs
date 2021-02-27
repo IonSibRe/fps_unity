@@ -25,7 +25,7 @@ public class SpawnManager : MonoBehaviour
         enemyCount = FindObjectsOfType<Target>().Length;
         if (enemyCount == 0)
         {
-            spawnEnemyCount += 5;
+            spawnEnemyCount += Random.Range(1, 11);
             SpawnEnemyWave(spawnEnemyCount);
         }
     }
