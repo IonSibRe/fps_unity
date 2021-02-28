@@ -6,7 +6,9 @@ using UnityEngine.AI;
 public class SpawnManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public GameObject pressureTank;
     public GameObject player;
+    public GameObject center;
 
     public int spawnEnemyCount = 5;
     public int enemyCount;
@@ -14,6 +16,9 @@ public class SpawnManager : MonoBehaviour
     public float spawnRange = 10f;
     public float maxDistance = 2.5f;
     public float restrictedSpawnRange;
+    public float spawnRangeMaxLimit;
+
+    private float playerToEnemyRange;
 
     void Start()
     {
@@ -39,9 +44,14 @@ public class SpawnManager : MonoBehaviour
 
         if (NavMesh.SamplePosition(randomPos + transform.position, out NavMeshHit hit, maxDistance, NavMesh.AllAreas))
         {
-            if (Vector3.Distance(player.transform.position, hit.position) > restrictedSpawnRange)
+            playerToEnemyRange = Vector3.Distance(player.transform.position, hit.position);
+
+            if (playerToEnemyRange > restrictedSpawnRange && center.GetComponent<Collider>().bounds.Contains(hit.position))
             {
-                return hit.position;
+                if (!pressureTank.GetComponent<Collider>().bounds.Contains(hit.position))
+                {
+                    return hit.position;
+                }
             }
         }
 
@@ -54,5 +64,14 @@ public class SpawnManager : MonoBehaviour
         {
             Instantiate(enemyPrefab, GenerateRandomSpawnPos() + new Vector3(0f, 2f, 0f), enemyPrefab.transform.rotation);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(center.transform.position, spawnRangeMaxLimit);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(player.transform.position, restrictedSpawnRange);
     }
 }
