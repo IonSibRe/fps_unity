@@ -19,6 +19,7 @@ public class SpawnManager : MonoBehaviour
     public float spawnRangeMaxLimit;
 
     private float playerToEnemyRange;
+    private float centerToHitPosition;
 
     void Start()
     {
@@ -42,11 +43,12 @@ public class SpawnManager : MonoBehaviour
 
         Vector3 randomPos = new Vector3(spawnPosX, 0f, spawnPosZ);
 
-        if (NavMesh.SamplePosition(randomPos + transform.position, out NavMeshHit hit, maxDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomPos + center.transform.position, out NavMeshHit hit, maxDistance, NavMesh.AllAreas))
         {
             playerToEnemyRange = Vector3.Distance(player.transform.position, hit.position);
+            centerToHitPosition = Vector3.Distance(center.transform.position, hit.position);
 
-            if (playerToEnemyRange > restrictedSpawnRange && center.GetComponent<Collider>().bounds.Contains(hit.position))
+            if (playerToEnemyRange > restrictedSpawnRange && centerToHitPosition < spawnRangeMaxLimit)
             {
                 if (!pressureTank.GetComponent<Collider>().bounds.Contains(hit.position))
                 {
@@ -68,9 +70,6 @@ public class SpawnManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(center.transform.position, spawnRangeMaxLimit);
-
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(player.transform.position, restrictedSpawnRange);
     }
