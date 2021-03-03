@@ -23,11 +23,9 @@
 .vs/
 
 # Custom Assets
-/Assets/Sci-Fi Weapons*
-/Assets/PostApocalypseGunsDemo*
+/Assets/External Assets*
 /Assets/Standard Assets*
 /Assets/TextMesh Pro*
-/Assets/Desert Environment*
 /Assets/Textures*
 
 # Nav Mesh Agent Assets

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
-using UnityEditor;
+using TMPro;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -11,6 +11,8 @@ public class SpawnManager : MonoBehaviour
     public GameObject pressureTank;
     public GameObject player;
     public GameObject center;
+
+    public TextMeshProUGUI roundEndText;
 
     public int spawnEnemyCount = 5;
     public int waveCount;
@@ -24,6 +26,10 @@ public class SpawnManager : MonoBehaviour
     private float playerToEnemyRange;
     private float centerToHitPosition;
 
+    private float roundEndTime = 5f;
+
+    private bool gameEnded;
+
     void Start()
     {
         waveCount = Random.Range(1, 2);
@@ -36,18 +42,31 @@ public class SpawnManager : MonoBehaviour
 
         if (waveCount == 0)
         {
-            if (SceneManager.GetActiveScene().buildIndex + 1 > EditorBuildSettings.scenes.Length)
-                Debug.Log("Finish");
-            else
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            gameEnded = true;
+            StartCoroutine(RoundEnd());
         }
 
-        if (enemyCount == 0 && waveCount > 0)
+        if (enemyCount == 0 && !gameEnded)
         {
             waveCount--;
-            spawnEnemyCount += Random.Range(1, 11);
-            SpawnEnemyWave(spawnEnemyCount);
+
+            if (waveCount != 0)
+            {
+                spawnEnemyCount += Random.Range(1, 11);
+                SpawnEnemyWave(spawnEnemyCount);
+            }
         }
+    }
+
+    private IEnumerator RoundEnd()
+    {
+        roundEndText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(roundEndTime);
+
+        roundEndText.gameObject.SetActive(false);
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private Vector3 GenerateRandomSpawnPos()
@@ -80,14 +99,5 @@ public class SpawnManager : MonoBehaviour
         {
             Instantiate(enemyPrefab, GenerateRandomSpawnPos() + new Vector3(0f, 2f, 0f), enemyPrefab.transform.rotation);
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(player.transform.position, restrictedSpawnRange);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(center.transform.position, spawnRangeMaxLimit);
     }
 }
