@@ -125,22 +125,6 @@ public class PlayerMovement : MonoBehaviour
             isCrouching = false;
             playerCollider.height = originalHeight;
         }
-
-        //if (Input.GetKeyDown(KeyCode.C))
-        //{
-        //    if (!isCrouching)
-        //    {
-        //        isSprinting = false;
-        //        isCrouching = true;
-        //        playerCollider.height = reducedHeight;
-        //    }
-
-        //    else
-        //    {
-        //        isCrouching = false;
-        //        playerCollider.height = originalHeight;
-        //    }
-        //}
     }
 
     private void StepClimb()

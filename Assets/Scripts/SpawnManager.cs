@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject center;
 
     public int spawnEnemyCount = 5;
+    public int waveCount;
     public int enemyCount;
     
     public float spawnRange = 10f;
@@ -23,14 +26,25 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
+        waveCount = Random.Range(1, 2);
         SpawnEnemyWave(spawnEnemyCount);
     }
 
     void Update()
     {
         enemyCount = FindObjectsOfType<Target>().Length;
-        if (enemyCount == 0)
+
+        if (waveCount == 0)
         {
+            if (SceneManager.GetActiveScene().buildIndex + 1 > EditorBuildSettings.scenes.Length)
+                Debug.Log("Finish");
+            else
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        if (enemyCount == 0 && waveCount > 0)
+        {
+            waveCount--;
             spawnEnemyCount += Random.Range(1, 11);
             SpawnEnemyWave(spawnEnemyCount);
         }
@@ -72,5 +86,8 @@ public class SpawnManager : MonoBehaviour
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(player.transform.position, restrictedSpawnRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(center.transform.position, spawnRangeMaxLimit);
     }
 }
