@@ -7,6 +7,7 @@ public class HUD : MonoBehaviour
 {
     public TextMeshProUGUI ammoText;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI healthText;
 
     private GameObject weaponHolder;
     private WeaponSwitching weaponSwitch;
@@ -31,6 +32,7 @@ public class HUD : MonoBehaviour
         // Update HUD
         ammoText.text = $"{gun.currentAmmo}/{gun.maxAmmo}";
         scoreText.text = $"Score: {score}";
+        healthText.text = $"{Player.health} HP";
     }
 
     private void GetCurrentGun()

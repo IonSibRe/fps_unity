@@ -19,8 +19,21 @@ public class EnemyAI : MonoBehaviour
 
     // Attacking
     public GameObject projectile;
+    public GameObject bulletSpawnPoint;
+
+    public ParticleSystem muzzleFlash;
+    public AudioClip gunShotSound;
+    public AudioSource shootSound;
+
     public float timeBetweenAttacks;
-    private bool alreadyAttacked;
+
+    private float reloadTime = 1.5f;
+    private float fireRate = 15.0f;
+    private float nextTimeToFire = 0f;
+
+    private int maxAmmo = 5;
+    private int currentAmmo;
+    private bool isReloading;
 
     // States
     public float sightRange;
@@ -32,6 +45,7 @@ public class EnemyAI : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        currentAmmo = maxAmmo;
     }
 
     void Update()
@@ -40,12 +54,19 @@ public class EnemyAI : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
 
+        // Reload
+        if (currentAmmo <= 0 && !isReloading)
+             StartCoroutine(Reload());
+
+        // Look For Player
         if (!playerInSightRange && !playerInAttackRange)
             Patroling();
 
+        // Follow Player
         if (playerInSightRange && !playerInAttackRange)
             ChasePlayer();
 
+        // Attack Player
         if (playerInAttackRange)
             AttactPlayer();
     }
@@ -54,7 +75,6 @@ public class EnemyAI : MonoBehaviour
     {
         if (!walkPointSet)
             SearchWalkPoint();
-
         else
             agent.SetDestination(walkPoint);
 
@@ -76,18 +96,24 @@ public class EnemyAI : MonoBehaviour
         transform.LookAt(player);
 
         // Attack
-        if (!alreadyAttacked)
+        if (!isReloading && Time.time >= nextTimeToFire)
         {
-            GameObject projectileGameObj = Instantiate(projectile, transform.position + transform.forward, Quaternion.identity);
+            nextTimeToFire = Time.time + 1f / fireRate;
+
+            // Instantiate Bullet
+            GameObject projectileGameObj = Instantiate(projectile, bulletSpawnPoint.transform.position, Quaternion.identity);
+
+            // Set Rotation Get RB
+            projectileGameObj.transform.LookAt(player.transform);
             Rigidbody projectileRB = projectileGameObj.GetComponent<Rigidbody>();
+
+            currentAmmo--;
+
+            muzzleFlash.Play();
+            shootSound.PlayOneShot(gunShotSound);
 
             projectileRB.AddForce((player.position - transform.position).normalized * 32f, ForceMode.Impulse);
 
-            alreadyAttacked = true;
-
-            StartCoroutine(ResetAttack());
-
-            // Destroy Projectiles
             Destroy(projectileGameObj, 2.0f);
         }
 
@@ -104,10 +130,14 @@ public class EnemyAI : MonoBehaviour
             walkPointSet = true;
     }
 
-    private IEnumerator ResetAttack()
+    private IEnumerator Reload()
     {
-        yield return new WaitForSeconds(timeBetweenAttacks);
-        alreadyAttacked = false;
+        isReloading = true;
+
+        yield return new WaitForSeconds(reloadTime);
+
+        currentAmmo = maxAmmo;
+        isReloading = false;
     }
 
     private void OnDrawGizmosSelected()
