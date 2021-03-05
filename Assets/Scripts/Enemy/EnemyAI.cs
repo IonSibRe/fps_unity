@@ -102,26 +102,37 @@ public class EnemyAI : MonoBehaviour
         transform.LookAt(player);
         gun.transform.LookAt(playerCollider.bounds.center);
 
+        RaycastHit hit;
+        Physics.Raycast(bulletSpawnPoint.transform.position, (playerCollider.bounds.center - transform.position).normalized, out hit, attackRange);
+
         // Attack
-        if (!isReloading && Time.time >= nextTimeToFire)
+        if (!isReloading && Time.time >= nextTimeToFire )
         {
-            nextTimeToFire = Time.time + 1f / fireRate;
+            if (hit.transform.gameObject.name == "Player")
+            {
+                nextTimeToFire = Time.time + 1f / fireRate;
 
-            // Instantiate Bullet
-            GameObject projectileGameObj = Instantiate(projectile, bulletSpawnPoint.transform.position, Quaternion.identity);
+                // Instantiate Bullet
+                GameObject projectileGameObj = Instantiate(projectile, bulletSpawnPoint.transform.position, Quaternion.identity);
 
-            // Set Rotation Get RB
-            projectileGameObj.transform.LookAt(playerCollider.bounds.center);
-            Rigidbody projectileRB = projectileGameObj.GetComponent<Rigidbody>();
+                // Set Rotation Get RB
+                projectileGameObj.transform.LookAt(playerCollider.bounds.center);
+                Rigidbody projectileRB = projectileGameObj.GetComponent<Rigidbody>();
 
-            currentAmmo--;
+                currentAmmo--;
 
-            muzzleFlash.Play();
-            shootSound.PlayOneShot(gunShotSound);
+                muzzleFlash.Play();
+                shootSound.PlayOneShot(gunShotSound);
 
-            projectileRB.AddForce((playerCollider.bounds.center - transform.position).normalized * projectileForce, ForceMode.Impulse);
+                projectileRB.AddForce((playerCollider.bounds.center - transform.position).normalized * projectileForce, ForceMode.Impulse);
 
-            Destroy(projectileGameObj, 2.0f);
+                Destroy(projectileGameObj, 2.0f);
+            }
+
+            else
+            {
+                ChasePlayer();
+            }
         }
 
     }
