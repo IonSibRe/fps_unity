@@ -1086,6 +1086,7 @@ MonoBehaviour:
   walkPointRange: 10
   projectile: {fileID: 9093121319935787945, guid: 3d49b62b9c13b5a499e7fa2e147fd441, type: 3}
   bulletSpawnPoint: {fileID: 3943355897439456366}
+  gun: {fileID: 3461327187793274831}
   muzzleFlash: {fileID: 7004451430025951362}
   gunShotSound: {fileID: 8300000, guid: 1b145bcffd767854fb0c71c37678ebaa, type: 3}
   shootSound: {fileID: 1437548154826080367}

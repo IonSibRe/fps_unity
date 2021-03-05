@@ -14,7 +14,7 @@ public class SpawnManager : MonoBehaviour
 
     public TextMeshProUGUI roundEndText;
 
-    public int spawnEnemyCount = 5;
+    public int spawnEnemyCount;
     public int waveCount;
     public int enemyCount;
     
@@ -32,7 +32,8 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
-        waveCount = Random.Range(1, 2);
+        spawnEnemyCount = Random.Range(1, 11); 
+        waveCount = Random.Range(2, 6);
         SpawnEnemyWave(spawnEnemyCount);
     }
 
@@ -63,6 +64,9 @@ public class SpawnManager : MonoBehaviour
         roundEndText.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(roundEndTime);
+
+        // Reset Health 
+        Player.health = 100;
 
         roundEndText.gameObject.SetActive(false);
 

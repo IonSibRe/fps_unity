@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -10,15 +11,23 @@ public class Player : MonoBehaviour
     {
         if (health <= 0)
         {
-            Debug.Log("Finish");
+            // Reset Health and Score
+            health = 100;
+            HUD.score = 0;
+
+            // Game Over
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("GameOverMenu");
         }
     }
     private void OnCollisionEnter (Collision collision)
     {
         if (collision.gameObject.CompareTag("Bullet") && health > 0)
         {
-            Debug.Log("Yo");
-            health -= 10;
+            // Destroy Bullet
+            Destroy(collision.gameObject);
+
+            health -= Random.Range(5, 16);
         }
     }
 }

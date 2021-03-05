@@ -13,7 +13,7 @@ public class HUD : MonoBehaviour
     private WeaponSwitching weaponSwitch;
     private Gun gun;
 
-    private static int score;
+    public static int score;
 
     void Start()
     {

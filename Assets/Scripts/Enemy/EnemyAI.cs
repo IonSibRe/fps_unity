@@ -20,6 +20,9 @@ public class EnemyAI : MonoBehaviour
     // Attacking
     public GameObject projectile;
     public GameObject bulletSpawnPoint;
+    public GameObject gun;
+
+    private Collider playerCollider;
 
     public ParticleSystem muzzleFlash;
     public AudioClip gunShotSound;
@@ -28,11 +31,13 @@ public class EnemyAI : MonoBehaviour
     public float timeBetweenAttacks;
 
     private float reloadTime = 1.5f;
-    private float fireRate = 15.0f;
+    private float fireRate = 7.5f;
     private float nextTimeToFire = 0f;
-
-    private int maxAmmo = 5;
+    private float projectileForce = 32;
+    
+    private int maxAmmo = 30;
     private int currentAmmo;
+
     private bool isReloading;
 
     // States
@@ -45,6 +50,7 @@ public class EnemyAI : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        playerCollider = player.GetComponent<Collider>();
         currentAmmo = maxAmmo;
     }
 
@@ -91,9 +97,10 @@ public class EnemyAI : MonoBehaviour
 
     private void AttactPlayer()
     {
-        // Go to & look at the Player
+        // Go to & look at the Player. Also set the rotate the weapon to aim at the center of the player
         agent.SetDestination(transform.position);
         transform.LookAt(player);
+        gun.transform.LookAt(playerCollider.bounds.center);
 
         // Attack
         if (!isReloading && Time.time >= nextTimeToFire)
@@ -104,7 +111,7 @@ public class EnemyAI : MonoBehaviour
             GameObject projectileGameObj = Instantiate(projectile, bulletSpawnPoint.transform.position, Quaternion.identity);
 
             // Set Rotation Get RB
-            projectileGameObj.transform.LookAt(player.transform);
+            projectileGameObj.transform.LookAt(playerCollider.bounds.center);
             Rigidbody projectileRB = projectileGameObj.GetComponent<Rigidbody>();
 
             currentAmmo--;
@@ -112,7 +119,7 @@ public class EnemyAI : MonoBehaviour
             muzzleFlash.Play();
             shootSound.PlayOneShot(gunShotSound);
 
-            projectileRB.AddForce((player.position - transform.position).normalized * 32f, ForceMode.Impulse);
+            projectileRB.AddForce((playerCollider.bounds.center - transform.position).normalized * projectileForce, ForceMode.Impulse);
 
             Destroy(projectileGameObj, 2.0f);
         }
@@ -139,14 +146,4 @@ public class EnemyAI : MonoBehaviour
         currentAmmo = maxAmmo;
         isReloading = false;
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, sightRange);
-    }
-
 }

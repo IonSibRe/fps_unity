@@ -9116,7 +9116,7 @@ MonoBehaviour:
   player: {fileID: 648133213}
   center: {fileID: 1918232578}
   roundEndText: {fileID: 162806559}
-  spawnEnemyCount: 1
+  spawnEnemyCount: 5
   waveCount: 0
   enemyCount: 0
   spawnRange: 100
@@ -18165,7 +18165,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh70118
+  m_Name: pb_Mesh39046
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -72411,8 +72411,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -335.5, y: 164.5}
-  m_SizeDelta: {x: 114.8546, y: 30.7794}
+  m_AnchoredPosition: {x: -347.47964, y: 164.5}
+  m_SizeDelta: {x: 90.8953, y: 30.7794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1859685659
 MonoBehaviour:
@@ -72470,7 +72470,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -72499,7 +72499,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -1.1330869, y: 0, z: 0, w: 0}
+  m_margin: {x: -1.1330869, y: 0, z: -0.0016793574, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

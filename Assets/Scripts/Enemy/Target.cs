@@ -6,7 +6,7 @@ public class Target : MonoBehaviour
 {
     private HUD hud;
 
-    public float health = 500.0f;
+    public float health = 100.0f;
 
     void Start()
     {
