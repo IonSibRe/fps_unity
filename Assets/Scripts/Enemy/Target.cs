@@ -6,11 +6,12 @@ public class Target : MonoBehaviour
 {
     private HUD hud;
 
-    public float health = 100.0f;
+    public float health;
 
     void Start()
     {
         hud = GameObject.Find("Player").GetComponent<HUD>();
+        health = Random.Range(100f, 151f);
     }
 
     public void TakeDamage(float amount)

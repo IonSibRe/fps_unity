@@ -4,7 +4,7 @@ public class MouseLook : MonoBehaviour
 {
     public Transform playerBody;
 
-    public float mouseSens = 150f;
+    public static float mouseSens = 350f;
     Vector3 offset;
 
     // Looking up or down = rotating around x axis which is why the variable is called xRotation

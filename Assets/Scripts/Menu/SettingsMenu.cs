@@ -29,7 +29,12 @@ public class SettingsMenu : MonoBehaviour
     public void SetVolume(float volume)
     {
         audioMixer.SetFloat("volume", volume);
-    }   
+    }
+
+    public void SetSensitivity(float sensitivity)
+    {
+        MouseLook.mouseSens = sensitivity;
+    }
 
     public void SetQuality(int qualityIndex)
     {
