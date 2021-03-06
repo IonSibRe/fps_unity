@@ -32,7 +32,7 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
-        spawnEnemyCount = Random.Range(1, 11);
+        //spawnEnemyCount = Random.Range(1, 11);
         waveCount = Random.Range(2, 6);
         SpawnEnemyWave(spawnEnemyCount);
     }

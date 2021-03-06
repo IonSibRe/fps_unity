@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent agent;
-    public Transform player;
+    private Transform player;
 
     // Layer Masks
     public LayerMask groundMask;
@@ -20,6 +20,7 @@ public class EnemyAI : MonoBehaviour
     // Attacking
     public GameObject projectile;
     public GameObject bulletSpawnPoint;
+    public GameObject bulletRayPoint;
     public GameObject gun;
 
     private Collider playerCollider;
@@ -103,10 +104,10 @@ public class EnemyAI : MonoBehaviour
         gun.transform.LookAt(playerCollider.bounds.center);
 
         RaycastHit hit;
-        Physics.Raycast(bulletSpawnPoint.transform.position, (playerCollider.bounds.center - transform.position).normalized, out hit, attackRange);
+        Physics.Raycast(bulletRayPoint.transform.position, (playerCollider.bounds.center - gun.transform.position).normalized, out hit, attackRange);
 
         // Attack
-        if (!isReloading && Time.time >= nextTimeToFire )
+        if (!isReloading && Time.time >= nextTimeToFire)
         {
             if (hit.transform.gameObject.name == "Player")
             {
@@ -124,7 +125,7 @@ public class EnemyAI : MonoBehaviour
                 muzzleFlash.Play();
                 shootSound.PlayOneShot(gunShotSound);
 
-                projectileRB.AddForce((playerCollider.bounds.center - transform.position).normalized * projectileForce, ForceMode.Impulse);
+                projectileRB.AddForce((playerCollider.bounds.center - gun.transform.position).normalized * projectileForce, ForceMode.Impulse);
 
                 Destroy(projectileGameObj, 2.0f);
             }
